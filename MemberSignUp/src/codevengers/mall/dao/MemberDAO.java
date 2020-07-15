@@ -65,8 +65,50 @@ public class MemberDAO {
 				System.out.println("으악! 에러났다2!!!!");
 			}
 		}
-
 	}
+	
+	public void delete(MemberDTO memberDTO) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			
+			Context context = new InitialContext();
+			DataSource dataSource = (DataSource)context.lookup("java:comp/env/jdbc");
+			connection=dataSource.getConnection();
+			
+			String sql = "delete from member ";
+			sql+=" where id = ?";
+			
+			preparedStatement =connection.prepareStatement(sql);
+			
+			preparedStatement.setString(1, memberDTO.getId());
+			int i = preparedStatement.executeUpdate();
+			if (i>0) {
+				System.out.println("삭제되었습니다.");
+				connection.commit();
+			}else {
+				System.out.println("없는 아이디 입니다.");
+				connection.rollback();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("에러났나??");
+			
+		}finally {
+			try {
+				preparedStatement.close();
+				connection.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+				System.out.println("에러났나2??");
+			}
+		}
+		
+	}
+	
+	
+	
 
 	public void check(MemberDTO memberDTO) {
 		Connection connection = null;
@@ -116,5 +158,33 @@ public class MemberDAO {
 		}
 
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
